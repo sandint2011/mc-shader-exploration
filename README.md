@@ -3,6 +3,8 @@
 ## Installations & Setup
 
 1. Download and install [Minecraft](https://www.minecraft.net/download).
+    * Alternatively, download and install [MultiMC](https://multimc.org/#Download).
+    * Download and install [Java](https://www.java.com/en/download/).
 
 ## Usage
 
