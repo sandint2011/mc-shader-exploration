@@ -10,3 +10,4 @@
 
 * Based on this [tutorial](https://github.com/saada2006/MinecraftShaderProgramming).
 * Using [Minecraft Java Edition](https://www.minecraft.net/download).
+* Using the [Optifine](https://optifine.net/downloads) mod for Minecraft (which adds shader support among other things).
