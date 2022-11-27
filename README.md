@@ -12,15 +12,15 @@ Download the following installers and files.
 
 ### Install Steps
 
-Follow these steps to install and setup Minecraft, MultiMC, and Optifine, to support shader mods.
+Follow these steps to install and setup Minecraft, MultiMC, and Optifine, to support shaders.
 
-1. In the MultiMC Settings, under the Java tab:
-    1. Set the minimum memory allocation to `512 MiB` and the maximum to `4096 MiB`, to give Minecraft more RAM.
-    1. Under the Java Runtime section, click Auto-Detect and select the Java 17 version.
-1. Create a Minecraft instance in MultiMC for version `1.19.2` and launch it, then close it.
-1. In MultiMC, click on the 1.19.2 instance and go to Edit Instance:
-    1. In the Version tab, click Install Forge and hit OK.
-    1. In the Loader mods tab, click Add and select the Optifine `.jar` file downloaded earlier.
+1. In the MultiMC _Settings_, under the _Java_ tab:
+    1. Set the _Minimum memory allocation_ to `512 MiB` and the _Maximum memory allocation_ to `4096 MiB`, to give Minecraft more RAM since shaders require more processing power than default Minecraft.
+    1. Under the _Java Runtime_ section, click _Auto-Detect_ and select the Java 17 version.
+1. In MultiMC, click _Add Instance_ to create a Minecraft instance for version `1.19.2`.
+1. In MultiMC, click on the _1.19.2_ instance and go to _Edit Instance_:
+    1. In the _Version_ tab, click _Install Forge_ and hit _OK_.
+    1. In the _Loader Mods_ tab, click _Add_ and select the Optifine `.jar` file downloaded earlier.
 
 ## Usage
 
@@ -28,11 +28,13 @@ Follow these steps to install and setup Minecraft, MultiMC, and Optifine, to sup
 
 Launch the modified Minecraft 1.1.92 instance through MultiMC, after following the installation steps above.
 
-Create or open up a world and hit ESCAPE and go to Options > Video Settings > Shaders. Select the shader you'd like to play around with. I recommend switching the world from Survival Mode ro Creative Mode, so you can explore the shaders without worying about dying.
+Create or open up a world and hit ESCAPE and go to _Options_ > _Video Settings..._ > _Shaders..._. Select the shader you'd like to play around with. I recommend switching the world from _Survival Mode_ to _Creative Mode_, so you can explore the shaders without worying about dying.
 
-### Adding More Shaders
+### Adding Shaders to Minecraft
 
-Shaders are added as folders or `.zip` files by going to MultiMC > 1.19.2 > Edit Instance > Shader Packs > Add and selecting one of the shaders from this repository.
+Shaders are added as folders or `.zip` files by clicking on the _1.19.2_ instance in MultiMC and goint to _Edit Instance_ > _Shader Packs_ > _Add_ and selecting one of the shaders from this repository.
+
+Feel free to download [BSL Shaders](https://www.bslshaders.com/download/) if you'd like an example of a fully developed shader that's used by the community.
 
 ## Links
 
