@@ -56,19 +56,19 @@ void main() {
 		Green = GAMEBOY_0;
 	// Green 0-1 (dither).
 	} else if (Color.g < 2.0 / 7.0) {
-		Green = doDither(PixelX, PixelY, GAMEBOY_0, GAMEBOY_1);
+		Green = dither(PixelX, PixelY, GAMEBOY_0, GAMEBOY_1);
 	// Green 1.
 	} else if (Color.g < 3.0 / 7.0) {
 		Green = GAMEBOY_1;
 	// Green 1-2 (dither).
 	} else if (Color.g < 4.0 / 7.0) {
-		Green = doDither(PixelX, PixelY, GAMEBOY_1, GAMEBOY_2);
+		Green = dither(PixelX, PixelY, GAMEBOY_1, GAMEBOY_2);
 	// Green 2.
 	} else if (Color.g < 5.0 / 7.0) {
 		Green = GAMEBOY_2;
 	// Green 2-3 (dither). 
 	} else if (Color.g < 6.0 / 7.0) {
-		Green = doDither(PixelX, PixelY, GAMEBOY_2, GAMEBOY_3);
+		Green = dither(PixelX, PixelY, GAMEBOY_2, GAMEBOY_3);
 	// Green 3.
 	} else {
 		Green = GAMEBOY_3;
