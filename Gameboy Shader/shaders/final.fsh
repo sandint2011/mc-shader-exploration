@@ -15,7 +15,7 @@ const vec3 GAMEBOY_2 = vec3(139, 172, 15) / vec3(255);
 const vec3 GAMEBOY_3 = vec3(155, 188, 15) / vec3(255);
 
 // Pixelation scale (1 is normal, 2 is double, 4 is quadruple, etc.).
-const int PIXEL_SCALE = 2;
+const int PIXEL_SCALE = 3;
 
 // When doing dithering between 2 colors, this decides which one to pick.
 vec3 dither(int x, int y, vec3 color1, vec3 color2) {
