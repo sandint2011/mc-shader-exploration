@@ -18,8 +18,12 @@ const vec3 GAMEBOY_3 = vec3(155, 188, 15) / vec3(255);
 const int PIXEL_SCALE = 2;
 
 // When doing dithering between 2 colors, this decides which one to pick.
-bool doDither(int x, int y) {
-	return (x/PIXEL_SCALE % 2 == 0 && y/PIXEL_SCALE % 2 != 0) || (y/PIXEL_SCALE % 2 == 0 && x/PIXEL_SCALE % 2 != 0);
+vec3 dither(int x, int y, vec3 color1, vec3 color2) {
+	bool DoDither = (x/PIXEL_SCALE % 2 == 0 && y/PIXEL_SCALE % 2 != 0) || (y/PIXEL_SCALE % 2 == 0 && x/PIXEL_SCALE % 2 != 0);
+	if (DoDither) {
+		return color1;
+	}
+	return color2;
 }
 
 void main() {
@@ -45,53 +49,30 @@ void main() {
 	int PixelX = int(floor(Pixel.x));
 	int PixelY = int(floor(Pixel.y));
 
+	// Pick from 4 green colors or 3 intermediate dither colors, based on color value.
 	vec3 Green;
 	// Green 0.
 	if (Color.g < 1.0 / 7.0) {
 		Green = GAMEBOY_0;
 	// Green 0-1 (dither).
 	} else if (Color.g < 2.0 / 7.0) {
-		if (doDither(PixelX, PixelY)) {
-			Green = GAMEBOY_0;
-		} else {
-			Green = GAMEBOY_1;
-		}
+		Green = doDither(PixelX, PixelY, GAMEBOY_0, GAMEBOY_1);
 	// Green 1.
 	} else if (Color.g < 3.0 / 7.0) {
 		Green = GAMEBOY_1;
 	// Green 1-2 (dither).
 	} else if (Color.g < 4.0 / 7.0) {
-		if (doDither(PixelX, PixelY)) {
-			Green = GAMEBOY_1;
-		} else {
-			Green = GAMEBOY_2;
-		}
+		Green = doDither(PixelX, PixelY, GAMEBOY_1, GAMEBOY_2);
 	// Green 2.
 	} else if (Color.g < 5.0 / 7.0) {
 		Green = GAMEBOY_2;
 	// Green 2-3 (dither). 
 	} else if (Color.g < 6.0 / 7.0) {
-		if (doDither(PixelX, PixelY)) {
-			Green = GAMEBOY_2;
-		} else {
-			Green = GAMEBOY_3;
-		}
+		Green = doDither(PixelX, PixelY, GAMEBOY_2, GAMEBOY_3);
 	// Green 3.
 	} else {
 		Green = GAMEBOY_3;
 	}
-
-
-	// Plain old 4-color gameboy (doesn't look as good).
-	// if (Color.g < 0.25) {
-	// 	Green = GAMEBOY_0;
-	// } else if (Color.g < 0.5) {
-	// 	Green = GAMEBOY_1;
-	// } else if (Color.g < 0.75) {
-	// 	Green = GAMEBOY_2;
-	// } else {
-	// 	Green = GAMEBOY_3;
-	// }
 
 	// Output the green color.
 	gl_FragColor = vec4(Green, 1.0f);
