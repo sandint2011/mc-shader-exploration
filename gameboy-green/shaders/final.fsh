@@ -14,19 +14,33 @@ const vec3 GAMEBOY_1 = vec3(48, 98, 48) / vec3(255);
 const vec3 GAMEBOY_2 = vec3(139, 172, 15) / vec3(255);
 const vec3 GAMEBOY_3 = vec3(155, 188, 15) / vec3(255);
 
+// Pixelation scale (1 is normal, 2 is double, 4 is quadruple, etc.).
+const int PIXEL_SCALE = 2;
+
 // When doing dithering between 2 colors, this decides which one to pick.
 bool doDither(int x, int y) {
-	return (x % 2 == 0 && y % 2 != 0) || (y % 2 == 0 && x % 2 != 0);
+	return (x/PIXEL_SCALE % 2 == 0 && y/PIXEL_SCALE % 2 != 0) || (y/PIXEL_SCALE % 2 == 0 && x/PIXEL_SCALE % 2 != 0);
 }
 
 void main() {
+	// Pixelate the screen by a4 so pixels look larger (makes dithering more noticeable and the screen more like an old pixelated gameboy screen).
+	vec2 PixelatedTexCoords = vec2(TexCoords.x, TexCoords.y);
+	// The following few lines are a long way of modulating, since GLSL v2.1 has problems with mod() or % when floats are involved.
+	// Convert texture coordinates to screen pixel coordinates, and floor them (just in case).
+	int PX = int(PixelatedTexCoords.x * viewWidth / PIXEL_SCALE);
+	int PY = int(PixelatedTexCoords.y * viewHeight / PIXEL_SCALE);
+	// Convert pixel coordinates back up to texture coordinates (essentially modulating).
+	PixelatedTexCoords.x = PX / viewWidth * PIXEL_SCALE;
+	PixelatedTexCoords.y = PY / viewHeight * PIXEL_SCALE;
+
 	// Sample the color.
-	vec3 Color = texture2D(colortex0, TexCoords).rgb;
+	vec3 Color = texture2D(colortex0, PixelatedTexCoords).rgb;
 
 	// Convert to grayscale.
 	Color = vec3(dot(Color, vec3(0.333f)));
 
 	// Get the pixel coordinate (for dithering). Bottom-left is (0,0).
+	// This doesn't use pixelated texture coordinates, because it causes artifacts, so it's handled in the doDither() function to compensate.
 	vec2 Pixel = vec2(TexCoords.x * viewWidth, TexCoords.y * viewHeight);
 	int PixelX = int(floor(Pixel.x));
 	int PixelY = int(floor(Pixel.y));
@@ -64,7 +78,7 @@ void main() {
 		}
 	// Green 3.
 	} else {
-	// 	Green = GAMEBOY_3;
+		Green = GAMEBOY_3;
 	}
 
 
