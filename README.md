@@ -30,11 +30,15 @@ Launch the modified Minecraft 1.1.92 instance through MultiMC, after following t
 
 Create or open up a world and hit ESCAPE and go to _Options_ > _Video Settings..._ > _Shaders..._. Select the shader you'd like to play around with. I recommend switching the world from _Survival Mode_ to _Creative Mode_, so you can explore the shaders without worying about dying.
 
+There will be READMEs inside each shader folder, explaining in further detail what the shader does.
+
 ### Adding Shaders to Minecraft
 
 Shaders are added as folders or `.zip` files by clicking on the _1.19.2_ instance in MultiMC and goint to _Edit Instance_ > _Shader Packs_ > _Add_ and selecting one of the shaders from this repository.
 
 Feel free to download [BSL Shaders](https://www.bslshaders.com/download/) if you'd like an example of a fully developed shader that's used by the community.
+
+When making changes to a shader, you'll need to switch the selected shader in Minecraft to `OFF` and back, to tell Minecraft to reload the shader.
 
 ## Links
 
