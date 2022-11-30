@@ -1,0 +1,9 @@
+#Wed Nov 30 11:59:41 CST 2022
+shadowDistance=128.0
+LIGHT_SHAFT=false
+SHADOW_FILTER=false
+WORLD_CURVATURE=true
+WORLD_CURVATURE_SIZE=-256
+shadowMapResolution=1024
+AO=false
+SHADOW_COLOR=false
