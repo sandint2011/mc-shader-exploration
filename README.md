@@ -47,3 +47,7 @@ When making changes to a shader, you'll need to switch the selected shader in Mi
 * Using the third party Minecraft launcher, [MultiMC](https://multimc.org/#Download).
     * This is used because Windows broke Minecraft such that it can't run if your Windows Microsoft account doesn't match your Minecraft Microsoft account.
 * Using the [Optifine](https://optifine.net/downloads) mod for Minecraft (which adds shader support and extra graphical settings/options).
+
+### Development
+
+* [Optifine Shaders Documentation](https://optifine.readthedocs.io/shaders_dev.html).
