@@ -20,7 +20,7 @@ This repository holds some shaderpacks we made for for Minecraft. We followed th
 
 Download the following installers and files.
 
-1. Alternatively, download and install [MultiMC](https://multimc.org/#Download).
+1. Download and install [MultiMC](https://multimc.org/#Download).
 1. Download and install [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html).
 1. Download [Optine](https://optifine.net/downloads) for version `1.19.2`.
 
