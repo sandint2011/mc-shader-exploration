@@ -2,45 +2,31 @@
 
 varying vec2 TexCoords;
 
-// Direction of the sun (not normalized).
+// Direction of the sun (not normalized!)
 uniform vec3 sunPosition;
 
-// The color texutre which we wrote to in `gbuffers_terrain`.
-uniform sampler2D colortex0; // Albedo.
-uniform sampler2D colortex1; // Normal.
-uniform sampler2D colortex2; // Lighting
-uniform sampler2D shadowtex0; // Shadow
+// The color textures which we wrote to
+uniform sampler2D colortex0;
+uniform sampler2D colortex1;
+uniform sampler2D colortex2;
+uniform sampler2D depthtex0;
+uniform sampler2D shadowtex0;
 
 uniform mat4 gbufferProjectionInverse;
 uniform mat4 gbufferModelViewInverse;
 uniform mat4 shadowModelView;
 uniform mat4 shadowProjection;
 
-
-// Set the out color texture formats,
-// using a comment because of course Minecraft would code with comments.
 /*
 const int colortex0Format = RGBA16F;
 const int colortex1Format = RGB16;
 const int colortex2Format = RGB16;
 */
 
-// Optifine will read this variable.
-const float sunPathRotation = -40.0; // How titled the sun path is, in degrees.
-const int shadowMapResolution = 1024
+const float sunPathRotation = -40.0f;
+const int shadowMapResolution = 1024;
+
 const float Ambient = 0.025f;
-
-float GetShadow(float depth){
-	vec3 ClipSpace = vec3(TexCoords, depth) * 2.0f - 1.0f;
-	vec4 ViewW = gbufferProjectionInverse * vec4(ClipSpace, 1.0f);
-	vec3 View = ViewW.xyz / ViewW.w;
-	vec4 World = gbufferModelViewInverse * vec4(View, 1.0f);
-	vec4 ShadowSpace = shadowProjection * shadowModelView * World;
-	vec3 SampleCoords = ShadowSpace.xyz * 0.5f + 0.5f;
-
-	return step(SampleCoords.z - 0.001f, texture2D(shadowtex0, SampleCoords.xy).r);
-}
-
 
 float AdjustLightmapTorch(in float torch) {
     const float K = 2.0f;
@@ -76,32 +62,34 @@ vec3 GetLightmapColor(in vec2 Lightmap){
     return LightmapLighting;
 }
 
-
-void main() {
-	// Account for gamma correction because textures have gamma already.
-	vec3 Albedo = pow(texture2D(colortex0, TexCoords).rgb, vec3(2.2f));
-	float Depth = texture2D(depthtex0, TexCoords).r;
-	if(Depth == 1.0f){
-    gl_FragData[0] = vec4(Albedo, 1.0f);
-    return;
+float GetShadow(float depth) {
+    vec3 ClipSpace = vec3(TexCoords, depth) * 2.0f - 1.0f;
+    vec4 ViewW = gbufferProjectionInverse * vec4(ClipSpace, 1.0f);
+    vec3 View = ViewW.xyz / ViewW.w;
+    vec4 World = gbufferModelViewInverse * vec4(View, 1.0f);
+    vec4 ShadowSpace = shadowProjection * shadowModelView * World;
+    vec3 SampleCoords = ShadowSpace.xyz * 0.5f + 0.5f;
+    return step(SampleCoords.z - 0.001f, texture2D(shadowtex0, SampleCoords.xy).r);
 }
 
-	// Get the normal and bring it to [-1, 1] range.
-	vec3 Normal = normalize(texture2D(colortex1, TexCoords).rgb * 2.0 - 1.0);
-
-	// Get the lightmap
-	vec2 Lightmap = texture2D(colortex2,TexCoords).rg;
-
-	// Get lightmap color
-	vec3 LightmapColor = GetLightmapColor(Lightmap);
-
-	// Computer the cosine theta between the normal and sun directions.
-	float NdotL = max(dot(Normal, normalize(sunPosition)), 0.0);
-
-	// Do the lighting calculations.
-	vec3 Diffuse = Albedo * (LightmapColor + NdotL * GetShadow(Depth) + Ambient);	// Declare access to draw buffers 0,
-	// using a comment because of course Minecraft would code with comments.
-	// Then write the diffuse color.
-	/* DRAWBUFFERS:0 */
-	gl_FragData[0] = vec4(Diffuse, 1.0); // This will re-gamma correct in the built-in final shader pass.
+void main(){
+    // Account for gamma correction
+    vec3 Albedo = pow(texture2D(colortex0, TexCoords).rgb, vec3(2.2f));
+    float Depth = texture2D(depthtex0, TexCoords).r;
+    if(Depth == 1.0f){
+        gl_FragData[0] = vec4(Albedo, 1.0f);
+        return;
+    }
+    // Get the normal
+    vec3 Normal = normalize(texture2D(colortex1, TexCoords).rgb * 2.0f - 1.0f);
+    // Get the lightmap
+    vec2 Lightmap = texture2D(colortex2, TexCoords).rg;
+    vec3 LightmapColor = GetLightmapColor(Lightmap);
+    // Compute cos theta between the normal and sun directions
+    float NdotL = max(dot(Normal, normalize(sunPosition)), 0.0f);
+    // Do the lighting calculations
+    vec3 Diffuse = Albedo * (LightmapColor + NdotL * GetShadow(Depth) + Ambient);
+    /* DRAWBUFFERS:0 */
+    // Finally write the diffuse color
+    gl_FragData[0] = vec4(Diffuse, 1.0f);
 }
