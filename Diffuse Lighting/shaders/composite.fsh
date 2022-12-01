@@ -84,6 +84,8 @@ float GetShadow(float depth) {
 	vec4 World = gbufferModelViewInverse * vec4(View, 1.0);
 	vec4 ShadowSpace = shadowProjection * shadowModelView * World;
 	vec3 SampleCoords = ShadowSpace.xyz * 0.5 + 0.5;
+
+	// The -0.001 is to fix this artifact: https://raw.githubusercontent.com/saada2006/MinecraftShaderProgramming/master/Tutorial%203%20-%20Advanced%20Lighting/images/shadow_acne.png
 	return step(SampleCoords.z - 0.001, texture2D(shadowtex0, SampleCoords.xy).r);
 }
 
