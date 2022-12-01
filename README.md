@@ -1,12 +1,26 @@
 # MC Shader Exploration
 
+This repository holds some shaderpacks we made for for Minecraft. We followed this [tutorial](https://github.com/saada2006/MinecraftShaderProgramming) to learn how to write shaders, and then used what we learned to write more complicated shaders.
+
+## Links
+
+* Based on this [tutorial](https://github.com/saada2006/MinecraftShaderProgramming).
+* Using [Minecraft Java Edition](https://www.minecraft.net/download) (no need to install this, though).
+* Using the third party Minecraft launcher, [MultiMC](https://multimc.org/#Download).
+    * This is used because Windows broke Minecraft such that it can't run if your Windows Microsoft account doesn't match your Minecraft Microsoft account.
+* Using the [Optifine](https://optifine.net/downloads) mod for Minecraft (which adds shader support and extra graphical settings/options).
+
+### Development
+
+* [Optifine Shaders Documentation](https://optifine.readthedocs.io/shaders_dev.html).
+
 ## Installations & Setup
 
 ### Downloads
 
 Download the following installers and files.
 
-1. Alternatively, download and install [MultiMC](https://multimc.org/#Download).
+1. Download and install [MultiMC](https://multimc.org/#Download).
 1. Download and install [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html).
 1. Download [Optine](https://optifine.net/downloads) for version `1.19.2`.
 
@@ -39,15 +53,3 @@ Shaders are added as folders or `.zip` files by clicking on the _1.19.2_ instanc
 Feel free to download [BSL Shaders](https://www.bslshaders.com/download/) if you'd like an example of a fully developed shader that's used by the community.
 
 When making changes to a shader, you'll need to switch the selected shader in Minecraft to `OFF` and back, to tell Minecraft to reload the shader.
-
-## Links
-
-* Based on this [tutorial](https://github.com/saada2006/MinecraftShaderProgramming).
-* Using [Minecraft Java Edition](https://www.minecraft.net/download) (no need to install this, though).
-* Using the third party Minecraft launcher, [MultiMC](https://multimc.org/#Download).
-    * This is used because Windows broke Minecraft such that it can't run if your Windows Microsoft account doesn't match your Minecraft Microsoft account.
-* Using the [Optifine](https://optifine.net/downloads) mod for Minecraft (which adds shader support and extra graphical settings/options).
-
-### Development
-
-* [Optifine Shaders Documentation](https://optifine.readthedocs.io/shaders_dev.html).
