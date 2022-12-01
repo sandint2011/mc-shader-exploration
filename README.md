@@ -1,6 +1,6 @@
 # MC Shader Exploration
 
-This repository holds some shaderpacks for Minecraft. We followed this [tutorial](https://github.com/saada2006/MinecraftShaderProgramming) to learn how to write shaders, and then used what we learned to write more complicated shaders.
+This repository holds some shaderpacks we made for for Minecraft. We followed this [tutorial](https://github.com/saada2006/MinecraftShaderProgramming) to learn how to write shaders, and then used what we learned to write more complicated shaders.
 
 ## Links
 
