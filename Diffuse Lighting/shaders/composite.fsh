@@ -1,4 +1,5 @@
 #version 120
+#include "distort.glsl"
 
 varying vec2 TexCoords;
 
@@ -10,7 +11,10 @@ uniform sampler2D colortex0; // Color.
 uniform sampler2D colortex1; // Normal.
 uniform sampler2D colortex2; // Lighting (Red channel is block light like torches, B channel is sky light affected by the day-night cycle).
 uniform sampler2D depthtex0; // Depth from player's perspective (used for shadows).
-uniform sampler2D shadowtex0; // Shadow.
+uniform sampler2D shadowtex0; // Shadow. (transparent blocks are opaque)
+uniform sampler2D shadowtex1; // Shadow. (transparent blocks are actually transparent)
+uniform sampler2D shadowcolor0; // Shadow Color
+uniform sampler2D noisetex;
 
 uniform mat4 gbufferProjectionInverse;
 uniform mat4 gbufferModelViewInverse;
@@ -27,7 +31,7 @@ const int colortex2Format = RGB16;
 
 const float sunPathRotation = -40.0; // The andle of the sun for casting light and shadows.
 const int shadowMapResolution = 1024; // The resolution we'd like to use for shadows (higher looks better but is more costly).
-
+const int noiseTextureResolution = 128; // Default value is 64
 // Ambient lighting value.
 const float Ambient = 0.025f;
 
@@ -76,17 +80,49 @@ vec3 GetLightmapColor(in vec2 Lightmap) {
 	return LightmapLighting;
 }
 
-// Get the shadow based on depth (this handles conversion between spaces and transformations and stuff).
-float GetShadow(float depth) {
-	vec3 ClipSpace = vec3(TexCoords, depth) * 2.0 - 1.0;
-	vec4 ViewW = gbufferProjectionInverse * vec4(ClipSpace, 1.0);
-	vec3 View = ViewW.xyz / ViewW.w;
-	vec4 World = gbufferModelViewInverse * vec4(View, 1.0);
-	vec4 ShadowSpace = shadowProjection * shadowModelView * World;
-	vec3 SampleCoords = ShadowSpace.xyz * 0.5 + 0.5;
 
-	// The -0.001 is to fix this artifact: https://raw.githubusercontent.com/saada2006/MinecraftShaderProgramming/master/Tutorial%203%20-%20Advanced%20Lighting/images/shadow_acne.png
-	return step(SampleCoords.z - 0.001, texture2D(shadowtex0, SampleCoords.xy).r);
+float Visibility(in sampler2D ShadowMap, in vec3 SampleCoords) {
+    return step(SampleCoords.z - 0.001f, texture2D(ShadowMap, SampleCoords.xy).r);
+}
+
+vec3 TransparentShadow(in vec3 SampleCoords){
+    float ShadowVisibility0 = Visibility(shadowtex0, SampleCoords);
+    float ShadowVisibility1 = Visibility(shadowtex1, SampleCoords);
+    vec4 ShadowColor0 = texture2D(shadowcolor0, SampleCoords.xy);
+    vec3 TransmittedColor = ShadowColor0.rgb * (1.0f - ShadowColor0.a); // Perform a blend operation with the sun color
+    return mix(TransmittedColor * ShadowVisibility1, vec3(1.0f), ShadowVisibility0);
+}
+
+
+
+#define SHADOW_SAMPLES 2
+const int ShadowSamplesPerSize = 2 * SHADOW_SAMPLES + 1;
+const int TotalSamples = ShadowSamplesPerSize * ShadowSamplesPerSize;
+
+
+// Get the shadow based on depth (this handles conversion between spaces and transformations and stuff).
+vec3 GetShadow(float depth) {
+    vec3 ClipSpace = vec3(TexCoords, depth) * 2.0f - 1.0f;
+    vec4 ViewW = gbufferProjectionInverse * vec4(ClipSpace, 1.0f);
+    vec3 View = ViewW.xyz / ViewW.w;
+    vec4 World = gbufferModelViewInverse * vec4(View, 1.0f);
+    vec4 ShadowSpace = shadowProjection * shadowModelView * World;
+    ShadowSpace.xy = DistortPosition(ShadowSpace.xy);
+    vec3 SampleCoords = ShadowSpace.xyz * 0.5f + 0.5f;
+    float RandomAngle = texture2D(noisetex, TexCoords * 20.0f).r * 100.0f;
+    float cosTheta = cos(RandomAngle);
+	float sinTheta = sin(RandomAngle);
+    mat2 Rotation =  mat2(cosTheta, -sinTheta, sinTheta, cosTheta) / shadowMapResolution; // We can move our division by the shadow map resolution here for a small speedup
+    vec3 ShadowAccum = vec3(0.0f);
+    for(int x = -SHADOW_SAMPLES; x <= SHADOW_SAMPLES; x++){
+        for(int y = -SHADOW_SAMPLES; y <= SHADOW_SAMPLES; y++){
+            vec2 Offset = Rotation * vec2(x, y);
+            vec3 CurrentSampleCoordinate = vec3(SampleCoords.xy + Offset, SampleCoords.z);
+            ShadowAccum += TransparentShadow(CurrentSampleCoordinate);
+        }
+    }
+    ShadowAccum /= TotalSamples;
+    return ShadowAccum;
 }
 
 void main() {
