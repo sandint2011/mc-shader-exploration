@@ -1,4 +1,4 @@
-# Gameboy Shader
+# NES Shader
 
 This shader overrides the final pass to make the game look like an old Gameboy screen. It accomplishes this by doing 3 things:
 
