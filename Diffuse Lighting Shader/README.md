@@ -10,3 +10,4 @@ This is accomplished using the following shader passes:
 * `shadow`, which simply passes the shadow texture.
 * `composite`, which does the majority of the lighting and diffuse calculations, and pulls from the previous shader passes to draw shadows as well.
 * `final`, which gamma corrects the color before finally outputting to the screen.
+* `distort`, which simply holds a function for distorting shadow vertices, which is used in two separate shaders.
