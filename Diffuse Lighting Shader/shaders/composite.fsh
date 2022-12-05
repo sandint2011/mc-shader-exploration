@@ -122,6 +122,7 @@ vec3 GetShadow(float depth) {
     mat2 Rotation =  mat2(cosTheta, -sinTheta, sinTheta, cosTheta) / shadowMapResolution; // We can move our division by the shadow map resolution here for a small speedup
     vec3 ShadowAccum = vec3(0.0);
     
+	// Loop through shadow samples and apply the blurring and noise effects.
 	for(int x = -SHADOW_SAMPLES; x <= SHADOW_SAMPLES; x++){
         for(int y = -SHADOW_SAMPLES; y <= SHADOW_SAMPLES; y++){
             vec2 Offset = Rotation * vec2(x, y);
