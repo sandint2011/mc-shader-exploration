@@ -108,7 +108,9 @@ vec3 closestColor(vec3 color) {
 	for (int i = 0; i < 54; i++) {
 		// vec3 C = rgb2hsv(color);
 		// vec3 N = rgb2hsv(NES_COLORS[i]);
+		// float Distance = distance(C, N);
 		float Distance = distance(color, NES_COLORS[i]);
+		
 		if (Distance < ShortestDistance) {
 			ShortestDistance = Distance;
 			ClosestColor = NES_COLORS[i];
