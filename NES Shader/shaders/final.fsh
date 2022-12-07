@@ -88,12 +88,26 @@ const vec3[54] NES_COLORS = {
 // Pixelation scale (1 is normal, 2 is double, 4 is quadruple, etc.).
 const int PIXEL_SCALE = 4;
 
+// Convert an RGB vecc3 to an HSV vec3.
+vec3 rgb2hsv(vec3 color)
+{
+	// Pulled from https://stackoverflow.com/questions/31835027/glsl-hsv-shader.
+	vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);
+	vec4 P = mix(vec4(color.bg, K.wz), vec4(color.gb, K.xy), step(color.b, color.g));
+	vec4 Q = mix(vec4(P.xyw, color.r), vec4(color.r, P.yzx), step(P.x, color.r));
+	float D = Q.x - min(Q.w, Q.y);
+	float E = 1.0e-10;
+	return vec3(abs(Q.z + (Q.w - Q.y) / (6.0 * D + E)), D / (Q.w + E), Q.x);
+}
+
 // Take an input color and output the closest NES color,
 // essentially limiting screen colors to the 54 NES palette colors.
 vec3 closestColor(vec3 color) {
 	vec3 ClosestColor = NES_COLORS[0];
 	float ShortestDistance = 1000.0;
 	for (int i = 0; i < 54; i++) {
+		// vec3 C = rgb2hsv(color);
+		// vec3 N = rgb2hsv(NES_COLORS[i]);
 		float Distance = distance(color, NES_COLORS[i]);
 		if (Distance < ShortestDistance) {
 			ShortestDistance = Distance;
