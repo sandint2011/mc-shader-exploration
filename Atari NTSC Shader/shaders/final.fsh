@@ -13,6 +13,13 @@ const int PIXEL_SCALE = 4;
 // NES's 54 colors (technically the palette had 64, but there were 2 identical whites and 10 identical blacks for some reason).
 const vec3[128] ATARI_COLORS = {
 	vec3(0, 0, 0) / vec3(255),
+	vec3(108, 108, 108) / vec3(255),
+	vec3(144, 144, 144) / vec3(255),
+	vec3(176, 176, 176) / vec3(255),
+	vec3(200, 200, 200) / vec3(255),
+	vec3(220, 220, 220) / vec3(255),
+	vec3(236, 236, 236) / vec3(255),
+	vec3(255, 255, 255) / vec3(255),
 	vec3(68, 68, 0) / vec3(255),
 	vec3(112, 40, 0) / vec3(255),
 	vec3(132, 24, 0) / vec3(255),
@@ -44,7 +51,6 @@ const vec3[128] ATARI_COLORS = {
 	vec3(52, 92, 28) / vec3(255),
 	vec3(76, 80, 28) / vec3(255),
 	vec3(100, 72, 24) / vec3(255),
-	vec3(108, 108, 108) / vec3(255),
 	vec3(132, 132, 36) / vec3(255),
 	vec3(152, 92, 40) / vec3(255),
 	vec3(172, 80, 48) / vec3(255),
@@ -60,7 +66,6 @@ const vec3[128] ATARI_COLORS = {
 	vec3(80, 124, 56) / vec3(255),
 	vec3(104, 112, 52) / vec3(255),
 	vec3(132, 104, 48) / vec3(255),
-	vec3(144, 144, 144) / vec3(255),
 	vec3(160, 160, 52) / vec3(255),
 	vec3(172, 120, 60) / vec3(255),
 	vec3(192, 104, 72) / vec3(255),
@@ -76,7 +81,6 @@ const vec3[128] ATARI_COLORS = {
 	vec3(108, 152, 80) / vec3(255),
 	vec3(132, 140, 76) / vec3(255),
 	vec3(160, 132, 68) / vec3(255),
-	vec3(176, 176, 176) / vec3(255),
 	vec3(184, 184, 64) / vec3(255),
 	vec3(188, 140, 76) / vec3(255),
 	vec3(208, 128, 92) / vec3(255),
@@ -92,7 +96,6 @@ const vec3[128] ATARI_COLORS = {
 	vec3(132, 180, 104) / vec3(255),
 	vec3(156, 168, 100) / vec3(255),
 	vec3(184, 156, 88) / vec3(255),
-	vec3(200, 200, 200) / vec3(255),
 	vec3(208, 208, 80) / vec3(255),
 	vec3(204, 160, 92) / vec3(255),
 	vec3(224, 148, 112) / vec3(255),
@@ -108,7 +111,6 @@ const vec3[128] ATARI_COLORS = {
 	vec3(156, 204, 124) / vec3(255),
 	vec3(180, 192, 120) / vec3(255),
 	vec3(208, 180, 108) / vec3(255),
-	vec3(220, 220, 220) / vec3(255),
 	vec3(232, 232, 92) / vec3(255),
 	vec3(220, 180, 104) / vec3(255),
 	vec3(236, 168, 128) / vec3(255),
@@ -124,7 +126,6 @@ const vec3[128] ATARI_COLORS = {
 	vec3(180, 228, 144) / vec3(255),
 	vec3(204, 212, 136) / vec3(255),
 	vec3(232, 204, 124) / vec3(255),
-	vec3(236, 236, 236) / vec3(255),
 	vec3(252, 252, 104) / vec3(255),
 	vec3(252, 188, 148) / vec3(255),
 	vec3(252, 180, 180) / vec3(255),
@@ -138,9 +139,20 @@ const vec3[128] ATARI_COLORS = {
 	vec3(184, 252, 184) / vec3(255),
 	vec3(200, 252, 164) / vec3(255),
 	vec3(224, 236, 156) / vec3(255),
-	vec3(252, 224, 140) / vec3(255),
-	vec3(255, 255, 255) / vec3(255)
+	vec3(252, 224, 140) / vec3(255)
 };
+
+// Convert an RGB vecc3 to an HSV vec3.
+vec3 rgb2hsv(vec3 color)
+{
+	// Pulled from https://stackoverflow.com/questions/31835027/glsl-hsv-shader.
+	vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);
+	vec4 P = mix(vec4(color.bg, K.wz), vec4(color.gb, K.xy), step(color.b, color.g));
+	vec4 Q = mix(vec4(P.xyw, color.r), vec4(color.r, P.yzx), step(P.x, color.r));
+	float D = Q.x - min(Q.w, Q.y);
+	float E = 1.0e-10;
+	return vec3(abs(Q.z + (Q.w - Q.y) / (6.0 * D + E)), D / (Q.w + E), Q.x);
+}
 
 // Take an input color and output the closest NES color,
 // essentially limiting screen colors to the 54 NES palette colors.
@@ -148,7 +160,9 @@ vec3 closestColor(vec3 color) {
 	vec3 ClosestColor = ATARI_COLORS[0];
 	float ShortestDistance = 1000.0;
 	for (int i = 0; i < 128; i++) {
-		float Distance = abs(length(color) - length(ATARI_COLORS[i]));
+		// vec3 C = rgb2hsv(color);
+		// vec3 A = rgb2hsv(ATARI_COLORS[i]);
+		float Distance = distance(color, ATARI_COLORS[i]);
 		if (Distance < ShortestDistance) {
 			ShortestDistance = Distance;
 			ClosestColor = ATARI_COLORS[i];
