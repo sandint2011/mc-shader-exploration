@@ -7,10 +7,7 @@ uniform sampler2D colortex0; // Optifine's internal shader output (reimplementat
 uniform float viewWidth;
 uniform float viewHeight;
 
-// Pixelation scale (1 is normal, 2 is double, 4 is quadruple, etc.).
-const int PIXEL_SCALE = 4;
-
-// NES's 54 colors (technically the palette had 64, but there were 2 identical whites and 10 identical blacks for some reason).
+// ATARI 2600 NTSC format's 128 colors.
 const vec3[128] ATARI_COLORS = {
 	vec3(0, 0, 0) / vec3(255),
 	vec3(108, 108, 108) / vec3(255),
@@ -142,17 +139,8 @@ const vec3[128] ATARI_COLORS = {
 	vec3(252, 224, 140) / vec3(255)
 };
 
-// Convert an RGB vecc3 to an HSV vec3.
-vec3 rgb2hsv(vec3 color)
-{
-	// Pulled from https://stackoverflow.com/questions/31835027/glsl-hsv-shader.
-	vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);
-	vec4 P = mix(vec4(color.bg, K.wz), vec4(color.gb, K.xy), step(color.b, color.g));
-	vec4 Q = mix(vec4(P.xyw, color.r), vec4(color.r, P.yzx), step(P.x, color.r));
-	float D = Q.x - min(Q.w, Q.y);
-	float E = 1.0e-10;
-	return vec3(abs(Q.z + (Q.w - Q.y) / (6.0 * D + E)), D / (Q.w + E), Q.x);
-}
+// Pixelation scale (1 is normal, 2 is double, 4 is quadruple, etc.).
+const int PIXEL_SCALE = 4;
 
 // Take an input color and output the closest NES color,
 // essentially limiting screen colors to the 54 NES palette colors.
@@ -160,9 +148,8 @@ vec3 closestColor(vec3 color) {
 	vec3 ClosestColor = ATARI_COLORS[0];
 	float ShortestDistance = 1000.0;
 	for (int i = 0; i < 128; i++) {
-		// vec3 C = rgb2hsv(color);
-		// vec3 A = rgb2hsv(ATARI_COLORS[i]);
 		float Distance = distance(color, ATARI_COLORS[i]);
+		//float Distance = length(dot(color - ATARI_COLORS[i], color - ATARI_COLORS[i])); // Identical to above (same performance too).
 		if (Distance < ShortestDistance) {
 			ShortestDistance = Distance;
 			ClosestColor = ATARI_COLORS[i];
@@ -185,18 +172,9 @@ void main() {
 	// Sample the color.
 	vec3 Color = texture2D(colortex0, PixelatedTexCoords).rgb;
 
-	// Convert to grayscale.
-	Color = vec3(dot(Color, vec3(0.333f)));
-
-	// Get the pixel coordinate (for dithering). Bottom-left is (0,0).
-	// This doesn't use pixelated texture coordinates, because it causes artifacts, so it's handled in the doDither() function to compensate.
-	vec2 Pixel = vec2(TexCoords.x * viewWidth, TexCoords.y * viewHeight);
-	int PixelX = int(floor(Pixel.x));
-	int PixelY = int(floor(Pixel.y));
-
 	// Pick the closest color in the NES color palette.
 	Color = closestColor(Color);
 
 	// Output the green color.
-	gl_FragColor = vec4(Color, 1.0f);
+	gl_FragColor = vec4(Color, 1.0);
 }

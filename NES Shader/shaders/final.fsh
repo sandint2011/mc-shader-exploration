@@ -7,13 +7,6 @@ uniform sampler2D colortex0; // Optifine's internal shader output (reimplementat
 uniform float viewWidth;
 uniform float viewHeight;
 
-// Gameboy's 4 green color values.
-// Haven't learned how to add custom uniforms yet, so they're hardcoded.
-const vec3 GAMEBOY_0 = vec3(15, 56, 15) / vec3(255);
-const vec3 GAMEBOY_1 = vec3(48, 98, 48) / vec3(255);
-const vec3 GAMEBOY_2 = vec3(139, 172, 15) / vec3(255);
-const vec3 GAMEBOY_3 = vec3(155, 188, 15) / vec3(255);
-
 // NES's 54 colors (technically the palette had 64, but there were 2 identical whites and 10 identical blacks for some reason).
 const vec3[54] NES_COLORS = {
 	// White to grey to black.
@@ -88,29 +81,14 @@ const vec3[54] NES_COLORS = {
 // Pixelation scale (1 is normal, 2 is double, 4 is quadruple, etc.).
 const int PIXEL_SCALE = 4;
 
-// Convert an RGB vecc3 to an HSV vec3.
-vec3 rgb2hsv(vec3 color)
-{
-	// Pulled from https://stackoverflow.com/questions/31835027/glsl-hsv-shader.
-	vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);
-	vec4 P = mix(vec4(color.bg, K.wz), vec4(color.gb, K.xy), step(color.b, color.g));
-	vec4 Q = mix(vec4(P.xyw, color.r), vec4(color.r, P.yzx), step(P.x, color.r));
-	float D = Q.x - min(Q.w, Q.y);
-	float E = 1.0e-10;
-	return vec3(abs(Q.z + (Q.w - Q.y) / (6.0 * D + E)), D / (Q.w + E), Q.x);
-}
-
 // Take an input color and output the closest NES color,
 // essentially limiting screen colors to the 54 NES palette colors.
 vec3 closestColor(vec3 color) {
 	vec3 ClosestColor = NES_COLORS[0];
 	float ShortestDistance = 1000.0;
 	for (int i = 0; i < 54; i++) {
-		// vec3 C = rgb2hsv(color);
-		// vec3 N = rgb2hsv(NES_COLORS[i]);
-		// float Distance = distance(C, N);
 		float Distance = distance(color, NES_COLORS[i]);
-		
+		//float Distance = length(dot(color - NES_COLORS[i], color - NES_COLORS[i])); // Identical to above (same performance too).
 		if (Distance < ShortestDistance) {
 			ShortestDistance = Distance;
 			ClosestColor = NES_COLORS[i];
@@ -133,18 +111,9 @@ void main() {
 	// Sample the color.
 	vec3 Color = texture2D(colortex0, PixelatedTexCoords).rgb;
 
-	// Convert to grayscale.
-	Color = vec3(dot(Color, vec3(0.333f)));
-
-	// Get the pixel coordinate (for dithering). Bottom-left is (0,0).
-	// This doesn't use pixelated texture coordinates, because it causes artifacts, so it's handled in the doDither() function to compensate.
-	vec2 Pixel = vec2(TexCoords.x * viewWidth, TexCoords.y * viewHeight);
-	int PixelX = int(floor(Pixel.x));
-	int PixelY = int(floor(Pixel.y));
-
 	// Pick the closest color in the NES color palette.
 	Color = closestColor(Color);
 
 	// Output the green color.
-	gl_FragColor = vec4(Color, 1.0f);
+	gl_FragColor = vec4(Color, 1.0);
 }
