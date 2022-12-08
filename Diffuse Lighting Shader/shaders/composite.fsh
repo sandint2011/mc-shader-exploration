@@ -9,7 +9,7 @@ uniform vec3 sunPosition;
 // The color textures which we write to or read from:
 uniform sampler2D colortex0; // Color.
 uniform sampler2D colortex1; // Normal.
-uniform sampler2D colortex2; // Lighting (Red channel is block light like torches, B channel is sky light affected by the day-night cycle).
+uniform sampler2D colortex2; // Lighting (Red channel is block light like torches, blue channel is sky light affected by the day-night cycle).
 uniform sampler2D depthtex0; // Depth from player's perspective (used for shadows).
 uniform sampler2D shadowtex0; // Shadow (transparent blocks are opaque).
 uniform sampler2D shadowtex1; // Shadow (transparent blocks are actually transparent).
