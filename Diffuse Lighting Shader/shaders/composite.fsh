@@ -36,6 +36,7 @@ const int noiseTextureResolution = 128; // Default value is 64.
 
 // Ambient lighting value.
 const float Ambient = 0.025;
+const float AmbientModifier = 0.125;
 
 // Colors of the torch and sky light.
 // The sky color should change depending on time of day, but is ignored for now for simplicity's sake.
@@ -155,8 +156,11 @@ void main() {
 	// Compute cosine-theta between the normal and sun directions.
 	float NdotL = max(dot(Normal, normalize(sunPosition)), 0.0);
 
+	// Base ambient light on sky light.
+	float AdjustedAmbient = Ambient + AmbientModifier * texture2D(colortex2, TexCoords).b;
+
 	// Do the lighting calculations to get the final diffuse color.
-	vec3 Diffuse = Albedo * (LightmapColor + NdotL * GetShadow(Depth) + Ambient);
+	vec3 Diffuse = Albedo * (LightmapColor + NdotL * GetShadow(Depth) + AdjustedAmbient);
 
 	// Declare that we want to use draw buffer 0 with a comment, because of course Minecarft has comments that actually do something lol.
 	/* DRAWBUFFERS:0 */
