@@ -2,6 +2,8 @@
 
 This repository holds some shaderpacks we made for for Minecraft. We followed this [tutorial](https://github.com/saada2006/MinecraftShaderProgramming) to learn how to write shaders, and then used what we learned to write more complicated shaders.
 
+There are additional README files in each shader's folder with more details on their implementation.
+
 ## Links
 
 * Based on this [tutorial](https://github.com/saada2006/MinecraftShaderProgramming).
