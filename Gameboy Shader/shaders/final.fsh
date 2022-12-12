@@ -50,24 +50,25 @@ void main() {
 	int PixelY = int(floor(Pixel.y));
 
 	// Pick from 4 green colors or 3 intermediate dither colors, based on color value.
+	int ColorIndex = int(floor(Color.g * 7.0)); // 0-6.
 	vec3 Green;
 	// Green 0.
-	if (Color.g < 1.0 / 7.0) {
+	if (ColorIndex == 0) {
 		Green = GAMEBOY_0;
 	// Green 0-1 (dither).
-	} else if (Color.g < 2.0 / 7.0) {
+	} else if (ColorIndex == 1) {
 		Green = dither(PixelX, PixelY, GAMEBOY_0, GAMEBOY_1);
 	// Green 1.
-	} else if (Color.g < 3.0 / 7.0) {
+	} else if (ColorIndex == 2) {
 		Green = GAMEBOY_1;
 	// Green 1-2 (dither).
-	} else if (Color.g < 4.0 / 7.0) {
+	} else if (ColorIndex == 3) {
 		Green = dither(PixelX, PixelY, GAMEBOY_1, GAMEBOY_2);
 	// Green 2.
-	} else if (Color.g < 5.0 / 7.0) {
+	} else if (ColorIndex == 4) {
 		Green = GAMEBOY_2;
 	// Green 2-3 (dither). 
-	} else if (Color.g < 6.0 / 7.0) {
+	} else if (ColorIndex == 5) {
 		Green = dither(PixelX, PixelY, GAMEBOY_2, GAMEBOY_3);
 	// Green 3.
 	} else {
