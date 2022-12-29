@@ -8,75 +8,74 @@ uniform float viewWidth;
 uniform float viewHeight;
 
 // NES's 54 colors (technically the palette had 64, but there were 2 identical whites and 10 identical blacks for some reason).
-const vec3[54] NES_COLORS = {
-	// White to grey to black.
-	vec3(254, 254, 254) / vec3(255),
-	vec3(184, 184, 184) / vec3(255),
-	vec3(174, 174, 174) / vec3(255),
-	vec3(102, 102, 102) / vec3(255),
-	vec3(79, 79, 79) / vec3(255),
-	vec3(0, 0, 0) / vec3(255),
-	// Red (light to dark).
-	vec3(254, 205, 198) / vec3(255),
-	vec3(254, 130, 112) / vec3(255),
-	vec3(181, 50, 32) / vec3(255),
-	vec3(108, 7, 0) / vec3(255),
-	// Orange (light to dark).
-	vec3(247, 217, 166) / vec3(255),
-	vec3(235, 159, 33) / vec3(255),
-	vec3(153, 79, 0) / vec3(255),
-	vec3(87, 29, 0) / vec3(255),
-	// Yellow (light to dark).
-	vec3(229, 230, 149) / vec3(255),
-	vec3(189, 191, 0) / vec3(255),
-	vec3(108, 110, 0) / vec3(255),
-	vec3(52, 53, 0) / vec3(255),
-	// Lime (light to dark).
-	vec3(208, 240, 151) / vec3(255),
-	vec3(137, 217, 0) / vec3(255),
-	vec3(56, 135, 0) / vec3(255),
-	vec3(12, 73, 0) / vec3(255),
-	// Green (light to dark).
-	vec3(190, 245, 171) / vec3(255),
-	vec3(93, 229, 48) / vec3(255),
-	vec3(13, 148, 0) / vec3(255),
-	vec3(0, 82, 0) / vec3(255),
-	// Teal (light to dark).
-	vec3(180, 243, 205) / vec3(255),
-	vec3(69, 225, 130) / vec3(255),
-	vec3(0, 144, 50) / vec3(255),
-	vec3(0, 79, 8) / vec3(255),
-	// Cyan (light to dark).
-	vec3(181, 236, 243) / vec3(255),
-	vec3(72, 206, 223) / vec3(255),
-	vec3(0, 124, 142) / vec3(255),
-	vec3(0, 64, 78) / vec3(255),
-	// Blue (light to dark).
-	vec3(193, 224, 254) / vec3(255),
-	vec3(100, 176, 254) / vec3(255),
-	vec3(21, 95, 218) / vec3(255),
-	vec3(0, 42, 136) / vec3(255),
-	// Indigo (light to dark).
-	vec3(212, 211, 254) / vec3(255),
-	vec3(147, 144, 254) / vec3(255),
-	vec3(66, 64, 254) / vec3(255),
-	vec3(20, 18, 168) / vec3(255),
-	// Purple (light to dark).
-	vec3(233, 200, 254) / vec3(255),
-	vec3(199, 119, 254) / vec3(255),
-	vec3(118, 39, 255) / vec3(255),
-	vec3(59, 0, 164) / vec3(255),
-	// Magenta (light to dark).
-	vec3(251, 195, 254) / vec3(255),
-	vec3(243, 106, 254) / vec3(255),
-	vec3(161, 27, 205) / vec3(255),
-	vec3(92, 0, 126) / vec3(255),
-	// Pink (light to dark).
-	vec3(254, 197, 235) / vec3(255),
-	vec3(254, 110, 205) / vec3(255),
-	vec3(184, 30, 124) / vec3(255),
-	vec3(110, 0, 64) / vec3(255)
-};
+const vec3[54] NES_COLORS;
+// White to grey to black.
+NES_COLORS[0] = vec3(254, 254, 254) / vec3(255);
+NES_COLORS[1] = vec3(184, 184, 184) / vec3(255);
+NES_COLORS[2] = vec3(174, 174, 174) / vec3(255);
+NES_COLORS[3] = vec3(102, 102, 102) / vec3(255);
+NES_COLORS[4] = vec3(79, 79, 79) / vec3(255);
+NES_COLORS[5] = vec3(0, 0, 0) / vec3(255);
+// Red (light to dark).
+NES_COLORS[6] = vec3(254, 205, 198) / vec3(255);
+NES_COLORS[7] = vec3(254, 130, 112) / vec3(255);
+NES_COLORS[8] = vec3(181, 50, 32) / vec3(255);
+NES_COLORS[9] = vec3(108, 7, 0) / vec3(255);
+// Orange (light to dark).
+NES_COLORS[10] = vec3(247, 217, 166) / vec3(255);
+NES_COLORS[11] = vec3(235, 159, 33) / vec3(255);
+NES_COLORS[12] = vec3(153, 79, 0) / vec3(255);
+NES_COLORS[13] = vec3(87, 29, 0) / vec3(255);
+// Yellow (light to dark).
+NES_COLORS[14] = vec3(229, 230, 149) / vec3(255);
+NES_COLORS[15] = vec3(189, 191, 0) / vec3(255);
+NES_COLORS[16] = vec3(108, 110, 0) / vec3(255);
+NES_COLORS[17] = vec3(52, 53, 0) / vec3(255);
+// Lime (light to dark).
+NES_COLORS[18] = vec3(208, 240, 151) / vec3(255);
+NES_COLORS[19] = vec3(137, 217, 0) / vec3(255);
+NES_COLORS[20] = vec3(56, 135, 0) / vec3(255);
+NES_COLORS[21] = vec3(12, 73, 0) / vec3(255);
+// Green (light to dark).
+NES_COLORS[22] = vec3(190, 245, 171) / vec3(255);
+NES_COLORS[23] = vec3(93, 229, 48) / vec3(255);
+NES_COLORS[24] = vec3(13, 148, 0) / vec3(255);
+NES_COLORS[25] = vec3(0, 82, 0) / vec3(255);
+// Teal (light to dark).
+NES_COLORS[26] = vec3(180, 243, 205) / vec3(255);
+NES_COLORS[27] = vec3(69, 225, 130) / vec3(255);
+NES_COLORS[28] = vec3(0, 144, 50) / vec3(255);
+NES_COLORS[29] = vec3(0, 79, 8) / vec3(255);
+// Cyan (light to dark).
+NES_COLORS[30] = vec3(181, 236, 243) / vec3(255);
+NES_COLORS[31] = vec3(72, 206, 223) / vec3(255);
+NES_COLORS[32] = vec3(0, 124, 142) / vec3(255);
+NES_COLORS[33] = vec3(0, 64, 78) / vec3(255);
+// Blue light to dark).
+NES_COLORS[34] = vec3(193, 224, 254) / vec3(255);
+NES_COLORS[35] = vec3(100, 176, 254) / vec3(255);
+NES_COLORS[36] = vec3(21, 95, 218) / vec3(255);
+NES_COLORS[37] = vec3(0, 42, 136) / vec3(255);
+// Indigo (light to dark).
+NES_COLORS[38] = vec3(212, 211, 254) / vec3(255);
+NES_COLORS[39] = vec3(147, 144, 254) / vec3(255);
+NES_COLORS[40] = vec3(66, 64, 254) / vec3(255);
+NES_COLORS[41] = vec3(20, 18, 168) / vec3(255);
+// Purple (light to dark).
+NES_COLORS[42] = vec3(233, 200, 254) / vec3(255);
+NES_COLORS[43] = vec3(199, 119, 254) / vec3(255);
+NES_COLORS[44] = vec3(118, 39, 255) / vec3(255);
+NES_COLORS[45] = vec3(59, 0, 164) / vec3(255);
+// Magenta (light to dark).
+NES_COLORS[46] = vec3(251, 195, 254) / vec3(255);
+NES_COLORS[47] = vec3(243, 106, 254) / vec3(255);
+NES_COLORS[48] = vec3(161, 27, 205) / vec3(255);
+NES_COLORS[49] = vec3(92, 0, 126) / vec3(255);
+// Pink (light to dark).
+NES_COLORS[50] = vec3(254, 197, 235) / vec3(255);
+NES_COLORS[51] = vec3(254, 110, 205) / vec3(255);
+NES_COLORS[52] = vec3(184, 30, 124) / vec3(255);
+NES_COLORS[53] = vec3(110, 0, 64) / vec3(255);
 
 // Pixelation scale (1 is normal, 2 is double, 4 is quadruple, etc.).
 const int PIXEL_SCALE = 4;
