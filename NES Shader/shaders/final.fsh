@@ -8,7 +8,7 @@ uniform float viewWidth;
 uniform float viewHeight;
 
 // NES's 54 colors (technically the palette had 64, but there were 2 identical whites and 10 identical blacks for some reason).
-const vec3[] NES_COLORS = {
+vec3[] NES_COLORS = {
 	// White to grey to black.
 	vec3(254, 254, 254) / vec3(255),
 	vec3(184, 184, 184) / vec3(255),

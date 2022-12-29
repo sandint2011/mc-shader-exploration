@@ -8,7 +8,7 @@ uniform float viewWidth;
 uniform float viewHeight;
 
 // ATARI 2600 NTSC format's 128 colors.
-const vec3[] ATARI_COLORS = {
+vec3[] ATARI_COLORS = {
 	vec3(0, 0, 0) / vec3(255),
 	vec3(108, 108, 108) / vec3(255),
 	vec3(144, 144, 144) / vec3(255),
